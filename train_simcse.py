@@ -31,6 +31,7 @@ load_dotenv()
 @dataclass
 class ModelArguments:
     model_name: str
+    peft_model_name_or_path: str
     device_map: str = field(default='auto')
     cache_dir: str = field(default='/data')
     torch_dtype: Optional[torch.dtype] = field(default=torch.bfloat16)
@@ -39,7 +40,6 @@ class ModelArguments:
     lora_dropout: float = field(default=0.05)
     bidirectional: bool = field(default=True)
     simcse_dropout: float = field(default=0.3)
-    peft_model_name_or_path: str = field(default="")
     merge_peft: bool = field(default=True)
     pooling_mode: str = field(default="mean", metadata={"choices": ["mean", "eos_token", "bos_token"]})
     loss_scale: float = field(default=20.0)
