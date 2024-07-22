@@ -131,7 +131,8 @@ def train():
         device_map = model_args.device_map,
         torch_dtype = model_args.torch_dtype,
         trust_remote_code=model_args.trust_remote_code,
-        cache_dir=model_args.cache_dir
+        cache_dir=model_args.cache_dir,
+        attn_implementation=model_args.attn_implementation
     )
 
     lora_config = LoraConfig(
