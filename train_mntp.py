@@ -90,8 +90,8 @@ def train():
 
     save_dir = model_args.model_name[model_args.model_name.rfind('/')+1:].lower()
 
-    training_args.output_dir = os.path.join(training_args.output_dir, save_dir)
-    training_args.logging_dir = os.path.join(training_args.logging_dir, save_dir)
+    training_args.output_dir = os.path.join(training_args.output_dir, save_dir + '-mntp')
+    training_args.logging_dir = os.path.join(training_args.logging_dir, save_dir + "-mntp")
 
     if training_args.gradient_checkpointing:
         training_args.gradient_checkpointing_kwargs = {"use_reentrant": False}
