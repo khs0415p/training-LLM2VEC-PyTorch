@@ -1,27 +1,33 @@
-from dataset import Dataset, DataSample, TrainSample
+from typing import Union, List
+from .dataset import Dataset, DataSample, TrainSample
 
 
 class LLM2VECDataset(Dataset):
     def __init__(
         self,
-        data_path: str,
+        data_path: Union[str, List[str]],
     ):
+        self.id_ = 0
         self.data = []
-        self.load_data(data_path)
+        if isinstance(data_path, list):
+            for path in data_path:
+                self.load_data(path)
+        else:
+            self.load_data(data_path)
 
     def load_data(self, data_path):
-        id_ = 0
+
         with open(data_path, 'r') as f:
             for line in f:
                 line = line.strip()
                 self.data.append(
                     DataSample(
-                        id_=id_,
+                        id_=self.id_,
                         query=line,
                         positive=line,
                     )
                 )
-                id_ += 1
+                self.id_ += 1
 
     def __getitem__(self, index):
         sample = self.data[index]
