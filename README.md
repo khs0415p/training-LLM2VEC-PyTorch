@@ -56,7 +56,7 @@ python train_mntp.py --model_name [model name or path]
 
 - SimCSE
 ```
-python train_mntp.py --model_name [model name or path] --peft_model_name_or_path [peft name or path]
+python train_simcse.py --model_name [model name or path] --peft_model_name_or_path [peft name or ath]
 ```
 
 ## Citation
