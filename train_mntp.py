@@ -58,7 +58,7 @@ class DataArguments:
 @dataclass
 class TrainingArguments(TrainingArguments):
     output_dir: str = field(default='results/')
-    num_train_epochs: int = field(default=10)
+    num_train_epochs: int = field(default=1)
     per_device_train_batch_size: int = field(default=16)
     optim: str = field(default="adamw_torch")
     warmup_steps: int = field(default=800)
@@ -138,7 +138,7 @@ def train():
     lora_config = LoraConfig(
         r=16,
         lora_alpha=32,
-        lora_dropout=0.3,
+        lora_dropout=0.05,
         bias="none",
         task_type=None,
         target_modules=['o_proj', 'q_proj', 'up_proj', 'down_proj', 'gate_proj', 'k_proj', 'v_proj'],
