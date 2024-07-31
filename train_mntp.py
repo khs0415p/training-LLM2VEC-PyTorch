@@ -155,7 +155,7 @@ def train():
         model.resize_token_embeddings(len(tokenizer))
 
     ### Data
-    raw_datasets = load_dataset("text", data_files=data_args.data_path, split='train')
+    raw_datasets = load_dataset("text", data_files=data_args.data_path, split='train', cache_dir=model_args.cache_dir)
     LOGGER.info(f"Line of Dataset : {len(raw_datasets)}")
 
     padding = "max_length"
