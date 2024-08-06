@@ -59,7 +59,7 @@ class DataArguments:
 class TrainingArguments(TrainingArguments):
     output_dir: str = field(default='results/')
     num_train_epochs: int = field(default=1)
-    per_device_train_batch_size: int = field(default=16)
+    per_device_train_batch_size: int = field(default=4)
     optim: str = field(default="adamw_torch")
     warmup_steps: int = field(default=800)
     lr_scheduler_type: Optional[str] = field(default='cosine')
@@ -68,7 +68,7 @@ class TrainingArguments(TrainingArguments):
     learning_rate: float = field(default=1e-5)
     logging_steps: int = field(default=10)
     logging_dir: str = field(default='logs/')
-    gradient_accumulation_steps: int = field(default=4)
+    gradient_accumulation_steps: int = field(default=16)
     model_max_length: int = field(default=4096)
     max_grad_norm: float = field(default=1.0)
     save_strategy: str = field(default="steps")
@@ -160,6 +160,8 @@ def train():
 
     padding = "max_length"
     max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
+    LOGGER.info(f"Max length : {max_seq_length}")
+
     def tokenize_function(examples):
         return tokenizer(
             examples['text'],
@@ -198,7 +200,7 @@ def train():
         tokenized_datasets = tokenized_datasets['train'].train_test_split(test_size=0.2)
         train_dataset = tokenized_datasets['train']
         eval_dataset = tokenized_datasets['test']
-    
+
     # Llama : BERT(20%) / Mistral : RoBERTa (80%)
     if 'llama' in model_args.model_name.lower():
         data_collator_cls = DataCollatorForLanguageModeling
