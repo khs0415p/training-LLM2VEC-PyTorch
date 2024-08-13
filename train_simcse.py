@@ -48,7 +48,6 @@ class ModelArguments:
 @dataclass
 class DataArguments:
     data_dir: str = field(default="data/")
-    data_path: Union[str, List[str]] = field(default=["/data/wiki1m_for_simcse.txt", "data/sim_cse/data.txt"])
     mlm_probability: float = field(default=0.15)
     max_seq_length: int = field(default=4096)
     validation_split_percentage: float = field(default=0.05)
@@ -71,7 +70,7 @@ class TrainingArguments(TrainingArguments):
     gradient_accumulation_steps: int = field(default=4)
     model_max_length: int = field(default=512)
     max_grad_norm: float = field(default=1.0)
-    save_strategy: str = field(default="steps")
+    save_strategy: str = field(default="epoch")
     save_steps: float = field(default=500)
     gradient_checkpointing: bool = field(default=True)
     report_to: Optional[str] = field(default='tensorboard')
@@ -104,10 +103,11 @@ def train():
             enable_bidirectional=model_args.bidirectional,
             peft_model_name_or_path=model_args.peft_model_name_or_path,
             merge_peft=True,
-            pooling_mode=model_args.polling_mode,
+            pooling_mode=model_args.pooling_mode,
             torch_dtype=model_args.torch_dtype,
             attn_implementation=model_args.attn_implementation,
             attention_dropout=model_args.simcse_dropout,
+            cache_dir=model_args.cache_dir
         )
 
     lora_config = LoraConfig(
@@ -120,7 +120,7 @@ def train():
         
     )
 
-    model.model = get_peft_model(model, lora_config)
+    model.model = get_peft_model(model.model, lora_config)
 
     model.model.print_trainable_parameters()
     model.model.config.use_cache = False
@@ -130,7 +130,8 @@ def train():
     train_loss = load_loss(model_args.loss_scale)
 
     ### Data
-    train_dataset = load_dataset(data_args.data_path)
+    data_path = ["/data/wiki1m_for_simcse.txt", "data/sim_cse/data.txt"]
+    train_dataset = load_dataset(data_path)
     
     train_examples = [
         train_dataset[i]
@@ -152,6 +153,7 @@ def train():
         )
     
     trainer.train()
+    trainer.save_model()
 
 if __name__ == "__main__":
     train()

@@ -70,6 +70,7 @@ class LLM2Vec(nn.Module):
         peft_model_name_or_path=None,
         merge_peft=False,
         enable_bidirectional=True,
+        cache_dir=None,
         **kwargs,
     ):
         # pop out encoder args
@@ -78,7 +79,7 @@ class LLM2Vec(nn.Module):
             key: kwargs.pop(key, None) for key in keys if kwargs.get(key) is not None
         }
 
-        tokenizer = AutoTokenizer.from_pretrained(base_model_name_or_path)
+        tokenizer = AutoTokenizer.from_pretrained(base_model_name_or_path, cache_dir=cache_dir)
         tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = "left"
 
@@ -88,13 +89,14 @@ class LLM2Vec(nn.Module):
         model_class = cls._get_model_class(
             config_class_name, enable_bidirectional=enable_bidirectional
         )
-        model = model_class.from_pretrained(base_model_name_or_path, **kwargs)
+        model = model_class.from_pretrained(base_model_name_or_path, cache_dir=cache_dir, **kwargs)
 
         # For special case where config.json and adapter weights are in the same directory
         if hasattr(model, "peft_config"):
             model = PeftModel.from_pretrained(
                 model,
                 base_model_name_or_path,
+                cache_dir=cache_dir
             )
             model = model.merge_and_unload()
 
@@ -102,6 +104,7 @@ class LLM2Vec(nn.Module):
             model = PeftModel.from_pretrained(
                 model,
                 peft_model_name_or_path,
+                cache_dir=cache_dir
             )
             if merge_peft:
                 model = model.merge_and_unload()
