@@ -134,7 +134,7 @@ class LLM2Vec(nn.Module):
             )
             return text
         if self.model.config._name_or_path in [
-            "mistralai/Mistral-7B-Instruct-v0.2",
+            "mistralai/Mistral-7B-Instruct-v0.3",
             "meta-llama/Llama-2-7b-chat-hf",
         ]:
             text = "[INST] " + text.strip() + " [/INST]"
