@@ -8,10 +8,10 @@ from dotenv import load_dotenv
 from dataset import load_dataset
 from dataclasses import dataclass, field
 from utils import (
-    DefaultCollator,
     SimCSETrainer,
     load_loss
 )
+from utils.collator import DefaultCollator
 from transformers import (
     AutoTokenizer,
     AutoConfig,
@@ -70,8 +70,8 @@ class TrainingArguments(TrainingArguments):
     gradient_accumulation_steps: int = field(default=4)
     model_max_length: int = field(default=512)
     max_grad_norm: float = field(default=1.0)
-    save_strategy: str = field(default="epoch")
-    save_steps: float = field(default=500)
+    save_strategy: str = field(default="steps")
+    save_steps: float = field(default=20000)
     gradient_checkpointing: bool = field(default=True)
     report_to: Optional[str] = field(default='tensorboard')
     do_train: Optional[bool] = field(default=True)

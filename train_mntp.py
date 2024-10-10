@@ -7,11 +7,8 @@ from itertools import chain
 from dotenv import load_dotenv
 from datasets import load_dataset
 from dataclasses import dataclass, field
-from utils import (
-    DataCollatorForLanguageModelingWithFullMasking,
-    DataCollatorForLanguageModeling,
-    MNTPTrainer
-)
+from utils import MNTPTrainer
+from utils.collator import DataCollatorForLanguageModelingWithFullMasking, DataCollatorForLanguageModeling
 from transformers import (
     AutoTokenizer,
     AutoConfig,
@@ -71,7 +68,7 @@ class TrainingArguments(TrainingArguments):
     gradient_accumulation_steps: int = field(default=16)
     model_max_length: int = field(default=4096)
     max_grad_norm: float = field(default=1.0)
-    save_strategy: str = field(default="steps")
+    save_strategy: str = field(default="no")
     save_steps: float = field(default=500)
     gradient_checkpointing: bool = field(default=True)
     report_to: Optional[str] = field(default='tensorboard')
