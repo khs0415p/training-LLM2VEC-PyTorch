@@ -1,4 +1,4 @@
-# LLM2VEC
+# LLM2VEC: Large Language Models Are Secretly Powerful Text Encoders
 
 LLM2VEC에 대한 설명은 [여기](https://velog.io/@khs0415p/Paper-LLM2Vec)를 참고하세요.
 
